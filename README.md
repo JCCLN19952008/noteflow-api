@@ -2,6 +2,12 @@
 
 Este es el Back-End para las REST APIs que componen la parte no visible de NoteFlow, desarrollado en reposiotrio separado del original que aloja la aplicacion, desarrollada de manera nativa para Android. Se ha desarrollado con  Next.js API Routes, Prisma, y una base de datos Neon empleando  PostgreSQL.Despliegue realizado en Vercel.
 
+**Notion Pages**
+https://www.notion.so/NoteFlow-API-Setup-368d747a11da806c8049f1cce1683419?source=copy_link
+
+https://www.notion.so/NoteFlow-API-Dev-Log-368d747a11da803395aae49c8cfb7800?source=copy_link
+
+
 ---
 
 ## Tech Stack
