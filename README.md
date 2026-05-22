@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NoteFlow API
 
-## Getting Started
+Este es el Back-End para las REST APIs que componen la parte no visible de NoteFlow, desarrollado en reposiotrio separado del original que aloja la aplicacion, desarrollada de manera nativa para Android. Se ha desarrollado con  Next.js API Routes, Prisma, y una base de datos Neon empleando  PostgreSQL.Despliegue realizado en Vercel.
 
-First, run the development server:
+---
+
+## Tech Stack
+
+| Herramienta | Proposito |
+|---|---|
+| Next.js 16 (App Router) | Entorno para API Routes |
+| Prisma | Mapeo objeto.relacional y migracion de  base de datos desde LocalStorage |
+| Neon |  Base de Datos basada en PostgreSQL ; de tipo serverless  |
+| Vercel | Despliegue y hosting de la app , interfa grafica no es representada en esta debido a ser una aplicacion nativa solo emulable en dispositivo Android |
+| Bruno | Testeo de las APIs |
+
+---
+
+## Live URL
+
+https://noteflow-api-ten.vercel.app
+
+
+---
+
+## Endpoints
+### Notes
+
+| Metodo | Endpoint | Descripcion |
+|---|---|---|
+| GET | `/api/notes` | Recopila todas las notas existentes, con y sin tags |
+| POST | `/api/notes` | Crea una nueva nota |
+| PATCH | `/api/notes/[id]` | Actualiza el titulo, el cuerpo de la nota y, en su caso, el tag |
+| DELETE | `/api/notes/[id]` | Borrar una nota |
+| PATCH | `/api/notes/[id]/pin` | Funcionalidad de pin de notas |
+
+![Screenshot-BrunoAPI](assets/screenshots/Screenshot-BrunoAPI.png)
+
+### Tags
+
+| Metodo | Endpoint | Descripcion |
+|---|---|---|
+| GET | `/api/tags` | Recopila todo los tags |
+| POST | `/api/tags` | Crea un nuevo tag |
+| DELETE | `/api/tags/[id]` | Borra un  tag |
+
+---
+
+## Schema de la Base de Datoa
+
+Dos tablas con cardinalidad relacional M-M,  configurada por Prisma:
+
+- **Note** — Sus atributos : id, title, body, pinned, createdAt, updatedAt .
+- **Tag** — Sus atributos: id, label, color, createdAt .
+- **_NoteTags** — La oepración "join" es automaticamente gestionada por parte de Prisma 
+
+
+![Screenshot-NeonDB](assets/screenshots/Screenshot-NeonDB.png)
+
+
+![Screenshot-NeonDBTable](assets/screenshots/Screenshot-NeonDBTable.png)
+
+![Screenshot-PrismaConfig](assets/screenshots/Screenshot-PrismaConfig.png)
+
+![Screenshot-PrismaSchema](assets/screenshots/Screenshot-PrismaSchema.png)
+
+---
+
+## Local Development
 
 ```bash
+# Instalar depednencias
+npm install
+
+# Set up de las Variables de Entorno
+# Crear .env con:
+DATABASE_URL="neon_connection_string"
+
+# Ejecutar la migracion de base de datos
+npx prisma migrate dev
+
+# Arrancar el server de desarrollo
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+El server corre en la direccion: `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+![Screenshot-NextJS](assets/screenshots/Screenshot-NextJS.png)
+---
 
-## Learn More
+## Despliegue
 
-To learn more about Next.js, take a look at the following resources:
+Desplegado automaticamente a  Vercel con cada psuhal repo remoto en Github, en la rama  `main`. La `DATABASE_URL` variable de entorno esta configurada dentro de los ajustes de proyecto de Vercel.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+![Screenshot-Vercel](assets/screenshots/Screenshot-Vercel.png)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
