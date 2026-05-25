@@ -9,6 +9,7 @@ datasource db {
 
 model Note {
   id        String   @id @default(cuid())
+  userId    String
   title     String
   body      String
   pinned    Boolean  @default(false)
