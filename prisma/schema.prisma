@@ -20,7 +20,8 @@ model Note {
 
 model Tag {
   id        String   @id @default(cuid())
-  label     String   @unique
+  userId    String
+  label     String
   color     String
   createdAt DateTime @default(now())
   notes     Note[]   @relation("NoteTags")
