@@ -8,13 +8,14 @@ export async function PATCH(
   try {
     const { id } = await params
     const body = await request.json()
-    const { title, body: noteBody, tags } = body
+    const { title, body: noteBody, tags, imageUrl } = body
 
     const note = await prisma.note.update({
       where: { id },
       data: {
         title,
         body: noteBody,
+        imageUrl,
         tags: {
           set: tags?.map((id: string) => ({ id })) ?? [],
         },
