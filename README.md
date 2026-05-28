@@ -18,6 +18,7 @@ https://www.notion.so/NoteFlow-API-Dev-Log-368d747a11da803395aae49c8cfb7800?sour
 | Prisma | Mapeo objeto.relacional y migracion de  base de datos desde LocalStorage |
 | Neon |  Base de Datos basada en PostgreSQL ; de tipo serverless  |
 | Vercel | Despliegue y hosting de la app , interfa grafica no es representada en esta debido a ser una aplicacion nativa solo emulable en dispositivo Android |
+| AWS S3 | Almacenamiento de imágenes adjuntas a las notas |
 | Bruno | Testeo de las APIs |
 
 ---
@@ -50,19 +51,25 @@ https://noteflow-api-ten.vercel.app
 | POST | `/api/tags` | Crea un nuevo tag |
 | DELETE | `/api/tags/[id]` | Borra un  tag |
 
+### Imágenes
+
+| Metodo | Endpoint | Descripcion |
+|---|---|---|
+| POST | `/api/upload` | Sube una imagen a AWS S3 y devuelve la URL pública |
+
+
 ---
 
-## Schema de la Base de Datoa
+## Schema de la Base de Datos
 
-Dos tablas con cardinalidad relacional M-M,  configurada por Prisma:
+Dos tablas con cardinalidad relacional M-M, configurada por Prisma. Cada nota y tag incluye un `userId` vinculado al UID de Firebase Auth, garantizando el aislamiento de datos entre cuentas:
 
-- **Note** — Sus atributos : id, title, body, pinned, createdAt, updatedAt .
-- **Tag** — Sus atributos: id, label, color, createdAt .
-- **_NoteTags** — La oepración "join" es automaticamente gestionada por parte de Prisma 
+- **Note** — Sus atributos: id, userId, title, body, pinned, imageUrl, createdAt y  updatedAt-
+- **Tag** — Sus atributos: id, userId, label, color y createdAt.
+- **_NoteTags** — La operación "join" es automáticamente gestionada por Prisma.
 
 
 ![Screenshot-NeonDB](assets/screenshots/Screenshot-NeonDB.png)
-
 
 ![Screenshot-NeonDBTable](assets/screenshots/Screenshot-NeonDBTable.png)
 
@@ -71,6 +78,27 @@ Dos tablas con cardinalidad relacional M-M,  configurada por Prisma:
 ![Screenshot-PrismaSchema](assets/screenshots/Screenshot-PrismaSchema.png)
 
 ---
+
+## Servicios Externos
+
+### Firebase Auth
+
+La API no gestiona autenticación directamente — eso lo hace Firebase Auth en el cliente. Sin embargo, todos los endpoints de notas y tags reciben un `userId` (el UID generado por Firebase) que se usa para filtrar los datos en la base de datos. Esto garantiza que cada usuario solo acceda a sus propias notas y tags.
+
+### AWS S3
+
+El endpoint `/api/upload` recibe una imagen desde la app, la sube al bucket `noteflow-images` en S3 bajo una carpeta con el `userId` del usuario, y devuelve la URL pública de la imagen. Las credenciales de AWS se configuran como variables de entorno en Vercel y nunca se exponen al cliente.
+
+---
+
+## Variables de Entorno en Vercel
+
+DATABASE_URL=neon_connection_string
+AWS_ACCESS_KEY_ID=your_aws_access_key
+AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+AWS_REGION=eu-central-1
+AWS_BUCKET_NAME=noteflow-images
+
 
 ## Local Development
 
