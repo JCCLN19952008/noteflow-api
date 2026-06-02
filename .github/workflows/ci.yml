@@ -29,3 +29,7 @@ jobs:
         run: npm test
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Trigger Vercel deployment
+        if: success()
+        run: curl -X POST ${{ secrets.VERCEL_DEPLOY_HOOK }}
