@@ -1,5 +1,8 @@
 # NoteFlow API
 
+
+[![NoteFlow API CI](https://github.com/JCCLN19952008/noteflow-api/actions/workflows/ci.yml/badge.svg)](https://github.com/JCCLN19952008/noteflow-api/actions/workflows/ci.yml)
+
 Este es el Back-End para las REST APIs que componen la parte no visible de NoteFlow, desarrollado en reposiotrio separado del original que aloja la aplicacion, desarrollada de manera nativa para Android. Se ha desarrollado con  Next.js API Routes, Prisma, y una base de datos Neon empleando  PostgreSQL.Despliegue realizado en Vercel.
 
 **Notion Pages**
